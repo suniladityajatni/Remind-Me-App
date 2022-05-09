@@ -12,7 +12,7 @@ import Navbar from '../Navbar/navbar';
 function Homepage(props) {
 
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
-  const url = "https://remind-meapp.herokuapp.com/";
+  const url = "https://remind-meapp.herokuapp.com";
   // console.log("DSADS")
   const navigate = useNavigate();
   const [reminderMssg, setReminderMssg] = useState("");

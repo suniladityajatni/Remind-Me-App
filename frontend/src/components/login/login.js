@@ -7,7 +7,7 @@ import { useCookies } from 'react-cookie';
 
 // import { isloggedIn } fro/m "../../App";
 const Login = (props) => {
-    const url = "https://remind-meapp.herokuapp.com/";
+    const url = "https://remind-meapp.herokuapp.com";
 
     const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
