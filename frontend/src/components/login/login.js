@@ -45,6 +45,7 @@ const Login = (props) => {
                 setCookie("token", res.data.token, { path: '/' })
                 // console.log(cookies)
                 // console.log("Done");
+                alert(res.data.message)
                 navigate("/")
                 // if(res.data.message==="")
             })
