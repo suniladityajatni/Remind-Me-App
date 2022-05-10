@@ -46,6 +46,7 @@ const Login = (props) => {
                 // console.log(cookies)
                 // console.log("Done");
                 alert(res.data.message)
+                window.location.reload()
                 navigate("/")
                 // if(res.data.message==="")
             })
