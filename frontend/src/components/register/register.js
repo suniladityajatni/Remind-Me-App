@@ -6,6 +6,7 @@ import axios from "axios";
 const Register = () => {
 
     const url = "https://remind-meapp.herokuapp.com";
+    // const url="http://localhost:9000";
     const navigate = useNavigate();
     const [user, setUser] = useState({
         name: "",

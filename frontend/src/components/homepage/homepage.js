@@ -13,6 +13,7 @@ function Homepage(props) {
 
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const url = "https://remind-meapp.herokuapp.com";
+  // const url="http://localhost:9000";
   // console.log("DSADS")
   const navigate = useNavigate();
   const [reminderMssg, setReminderMssg] = useState("");

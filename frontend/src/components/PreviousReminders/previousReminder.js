@@ -12,6 +12,7 @@ import Navbar from '../Navbar/navbar';
 function PreviousReminder(props) {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
   const url = "https://remind-meapp.herokuapp.com";
+  // const url="http://localhost:9000";
   const [allRemiders, setAllReminders] = useState([])
 
   useEffect(() => {

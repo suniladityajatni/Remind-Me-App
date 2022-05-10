@@ -8,7 +8,7 @@ import { useCookies } from 'react-cookie';
 // import { isloggedIn } fro/m "../../App";
 const Login = (props) => {
     const url = "https://remind-meapp.herokuapp.com";
-
+    // const url="http://localhost:9000";
     const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
     // const isLoggedIn=useContext(isloggedIn);
@@ -41,7 +41,7 @@ const Login = (props) => {
                 // console.log("DoneUptoHere");
                 // console.log(props);
                 // setCookie("_id", res.data.user._id, { path: '/' });
-                // setCookie("phoneNumber", res.data.user.phoneNumber, { path: '/' });
+                setCookie("phoneNumber", res.data.user.phoneNumber, { path: '/' });
                 setCookie("token", res.data.token, { path: '/' })
                 // console.log(cookies)
                 // console.log("Done");
