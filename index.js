@@ -6,11 +6,12 @@ const express = require('express')
 const cors=require('cors')
 const fast2sms =require("fast-two-sms")
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 // const session = require('express-session')
 // const passport=require('passport');
 // const passportLocalMongoose=require("passport-local-mongoose")
 
-const JWT_SECRET="AdityaIsALegend";
+const JWT_SECRET=process.env.JWT_SECRET;
 const app = express()
 
 app.use(express.static(path.resolve(__dirname, 'frontend/build')));
@@ -26,8 +27,8 @@ app.use(cors());
 
 // app.use(passport.initialize());
 // app.use(passport.session());
-
-mongoose.connect('mongodb+srv://Aditya:Aditya_2001@cluster0.spp2b.mongodb.net/reminderAppDB',() => console.log("DB connected"));
+const mongodbPassword=process.env.MONGODB_PASSWORD
+mongoose.connect('mongodb+srv://Aditya:'+mongodbPassword+'@cluster0.spp2b.mongodb.net/reminderAppDB',() => console.log("DB connected"));
 
 const reminderSchema = new mongoose.Schema({
     ReminderMessage: String,
@@ -75,7 +76,7 @@ setInterval(() =>{
                     {
                         Reminder.findByIdAndUpdate(element._id, {isReminded: true}, (err, remindObj)=>{
                             console.log(element.ReminderMessage)
-                            API_KEY="udovhMkKJ6HFQ34AejpaTtRgODUfxrcEVZXm278iLPl9SIWsyb1eDQCqkt2PAuzbBSLIO3Uo0hVvijcK"
+                            API_KEY=process.env.API_KEY
                             var options = {authorization : API_KEY , message : element.ReminderMessage ,  numbers : [element.phoneNumber]}
                             const response=fast2sms.sendMessage(options)
                         })

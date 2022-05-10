@@ -1,23 +1,20 @@
 // import { useState } from 'react';
 import React, { useEffect, useState } from 'react';
 import './previReminder.css';
-import axios from 'axios';
-import DateTimePicker from 'react-datetime-picker';
-import { useNavigate } from 'react-router-dom';
+
 
 import { useCookies } from 'react-cookie';
 import Navbar from '../Navbar/navbar';
-// import { Navigate } from 'react-router-dom';
+import axiosInstance from '../../axiosInstance';
 
 function PreviousReminder(props) {
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
-  const url = "https://remind-meapp.herokuapp.com";
-  // const url="http://localhost:9000";
+ 
   const [allRemiders, setAllReminders] = useState([])
 
   useEffect(() => {
     const token=cookies.token
-    axios.post(url + "/getAllReminder", { token }).then(
+    axiosInstance.post("/getAllReminder", { token }).then(
       (res) => {
         console.log(res.data)
         setAllReminders(res.data)
@@ -28,7 +25,7 @@ function PreviousReminder(props) {
   const deletRemider = (_id) => {
     const id = _id;
     const phoneNumber = props.user.phoneNumber
-    axios.post(url + "/deletRemider", { id, phoneNumber }).then((res) => { setAllReminders(res.data) })
+    axiosInstance.post("/deletRemider", { id, phoneNumber }).then((res) => { setAllReminders(res.data) })
   }
   return (
     <div className="App">

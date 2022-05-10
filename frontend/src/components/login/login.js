@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import './login.css';
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import { useCookies } from 'react-cookie';
+import axiosInstance from "../../axiosInstance";
 
 // import { isloggedIn } fro/m "../../App";
 const Login = (props) => {
-    const url = "https://remind-meapp.herokuapp.com";
-    // const url="http://localhost:9000";
+
     const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
     // const isLoggedIn=useContext(isloggedIn);
@@ -29,7 +28,7 @@ const Login = (props) => {
 
     const handleLogin = () => {
         if (user.phoneNumber && user.password) {
-            axios.post(url + "/login", user).then((res) => {
+            axiosInstance.post("/login", user).then((res) => {
                 // console.log(res.data.message)
                 const newData={
                     'phoneNumber':res.data.user.phoneNumber,
@@ -46,8 +45,9 @@ const Login = (props) => {
                 // console.log(cookies)
                 // console.log("Done");
                 alert(res.data.message)
-                window.location.reload()
+                
                 navigate("/")
+                window.location.reload()
                 // if(res.data.message==="")
             })
 

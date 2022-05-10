@@ -7,14 +7,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { useCookies } from 'react-cookie';
 import Navbar from '../Navbar/navbar';
+import axiosInstance from '../../axiosInstance';
 // import { Navigate } from 'react-router-dom';
 
 function Homepage(props) {
 
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
-  const url = "https://remind-meapp.herokuapp.com";
-  // const url="http://localhost:9000";
-  // console.log("DSADS")
+  
   const navigate = useNavigate();
   const [reminderMssg, setReminderMssg] = useState("");
   const [remindTime, setRemindTime] = useState(new Date());
@@ -24,7 +23,7 @@ function Homepage(props) {
     // const phoneNumber = props.user.phoneNumber
     const token=cookies.token
     // console.log("phoneNumber = "+phoneNumber);
-    axios.post(url + "/getAllReminder", { token }).then(
+    axiosInstance.post("/getAllReminder", { token }).then(
       (res) => {
 
         console.log(res.data)
@@ -38,7 +37,7 @@ function Homepage(props) {
     const ReminderMessage = reminderMssg
     const RemindAt = remindTime
     const phoneNumber = props.user.phoneNumber
-    axios.post(url + "/addReminder", { ReminderMessage, RemindAt, phoneNumber }).then(
+    axiosInstance.post("/addReminder", { ReminderMessage, RemindAt, phoneNumber }).then(
       (res) => {
         console.log(res.data)
         setAllReminders(res.data)
@@ -52,7 +51,7 @@ function Homepage(props) {
   const deletRemider = (_id) => {
     const id = _id;
     const phoneNumber = props.user.phoneNumber
-    axios.post(url + "/deletRemider", { id, phoneNumber }).then((res) => { setAllReminders(res.data) })
+    axiosInstance.post("/deletRemider", { id, phoneNumber }).then((res) => { setAllReminders(res.data) })
   }
   const handleChange = (e) => {
     setReminderMssg(e.target.value);

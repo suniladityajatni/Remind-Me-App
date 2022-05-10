@@ -13,10 +13,9 @@ import Homepage from './components/homepage/homepage';
 import Login from './components/login/login';
 import Register from './components/register/register';
 import PreviousReminder from './components/PreviousReminders/previousReminder';
+import axiosInstance from './axiosInstance';
 function App() {
-  // const url = "http://localhost:9000";
-
-  const url = "https://remind-meapp.herokuapp.com";
+  
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
   const [user, setUser] = useState({'_id':false,'phoneNumber':false,'password':false});
@@ -27,7 +26,7 @@ function App() {
       {
 
 
-        axios.post(url + "/getUser", {'token':cookies.token}).then((res) => {
+        axiosInstance.post("/getUser", {'token':cookies.token}).then((res) => {
           console.log("I m here");
           console.log(res.data.user);
           setUser({
