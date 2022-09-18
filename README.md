@@ -7,6 +7,6 @@
  
 ## Things left:-
 - Using bcrypt to hash password before storing
-- Adding the functanality so that users can update their phone number and passords.
+- Adding the functanality so that users can update their phone number and passwords.
 
 ### If u have any more suggestions do let me know :).
