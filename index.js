@@ -6,6 +6,8 @@ const express = require('express')
 const cors=require('cors')
 const fast2sms =require("fast-two-sms")
 const jwt = require('jsonwebtoken');
+const { body, validationResult } = require('express-validator');
+
 require('dotenv').config();
 // const session = require('express-session')
 // const passport=require('passport');
@@ -48,14 +50,6 @@ const userSchema=new mongoose.Schema({
 const Reminder = new mongoose.model("reminder", reminderSchema)
 const User=new mongoose.model("User",userSchema)
 
-// passport.use(User.createStrategy());
-
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
-
-// const User=ne
-// const port = 9000
-
 app.get('/', (req, res) => {
     console.log(req.body);
   res.send('Hello World!')
@@ -64,8 +58,6 @@ app.get('/', (req, res) => {
 setInterval(() =>{
     
     Reminder.find({},(err,reminder) =>{
-
-        // API_KEY="udovhMkKJ6HFQ34AejpaTtRgODUfxrcEVZXm278iLPl9SIWsyb1eDQCqkt2PAuzbBSLIO3Uo0hVvijcK"
         if(!err)
         {
             reminder.forEach(element => {
@@ -75,10 +67,18 @@ setInterval(() =>{
                     if((new Date(element.RemindAt) - now) < 0) 
                     {
                         Reminder.findByIdAndUpdate(element._id, {isReminded: true}, (err, remindObj)=>{
+                            console.log("==================================================================\n")
+                            console.log(remindObj);
+                            console.log("==================================================================\n")
                             console.log(element.ReminderMessage)
                             API_KEY=process.env.API_KEY
                             var options = {authorization : API_KEY , message : element.ReminderMessage ,  numbers : [element.phoneNumber]}
                             const response=fast2sms.sendMessage(options)
+                            // console.log(response);
+                            response.then((res) => {
+                                console.log("###################\n");
+                                console.log(res);
+                            })
                         })
                     }
                 }
@@ -87,26 +87,16 @@ setInterval(() =>{
     })
     
 }, 1000);
-// app.post("/send",async (req,res) =>{
-//     API_KEY=""
-//     var options = {authorization : API_KEY , message : req.body.message ,  numbers : [req.body.number]}
-//     const response=await fast2sms.sendMessage(options)
-//     res.send(response) 
-// })
 
 app.post("/getAllReminder",async (req,res) => {
-    // res.send("DSADsa")
-    // console.log("Co");
     const {token}=req.body;
     try{
            const data=jwt.verify(token,JWT_SECRET);
             const id=data.user.id; 
            console.log("id ",id);
-        //    console.log("phone NUMEber="+phoneNumber)
            const user=await User.findOne({_id:id});
            const nphoneNumber=user.phoneNumber;
            Reminder.find({phoneNumber:nphoneNumber},(err,result) => {
-               // console.error(err);
                console.log(result)
                if(err)
                {
@@ -133,21 +123,6 @@ app.get("/homepage",(req,res) => {
 })
 app.post("/register",(req,res) =>{
     const {name,phoneNumber,password}=req.body;
-    // User.register({phoneNumber:phoneNumber},password,(err,user) => {
-    //     if(err)
-    //     {
-    //         console.log(err);
-    //         res.redirect("/register")
-    //     }
-    //     else{
-    //         passport.authenticate('local')(req,res,function()
-    //         {
-    //             res.redirect("/homepage");
-    //         })
-            
-    //     }
-    // })
-    // console.log(req.body)
     User.findOne({phoneNumber:phoneNumber},(err,user) =>{
         if(user)
         {
@@ -164,7 +139,14 @@ app.post("/register",(req,res) =>{
     })
 })
 
-app.post("/login",(req,res) =>{
+app.post("/login",[
+    body('phoneNumber').isLength({ min: 10,max:10 }),
+    body('phoneNumber').isDecimal()
+],(req,res) =>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.send({message:"Bad credentials"});
+    }
     const {phoneNumber,password}=req.body;
     User.findOne({phoneNumber:phoneNumber},(err,user)=>{
         if(!user)

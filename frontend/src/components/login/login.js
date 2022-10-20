@@ -29,6 +29,11 @@ const Login = (props) => {
     const handleLogin = () => {
         if (user.phoneNumber && user.password) {
             axiosInstance.post("/login", user).then((res) => {
+                if(res.data.message!="login sucess")
+                {
+                    alert(res.data.message);
+                    return;
+                }
                 // console.log(res.data.message)
                 const newData={
                     'phoneNumber':res.data.user.phoneNumber,
@@ -37,18 +42,12 @@ const Login = (props) => {
                 props.setUser(newData)
                 console.log(res.data.token);
                 console.log(res);
-                // console.log("DoneUptoHere");
-                // console.log(props);
-                // setCookie("_id", res.data.user._id, { path: '/' });
                 setCookie("phoneNumber", res.data.user.phoneNumber, { path: '/' });
                 setCookie("token", res.data.token, { path: '/' })
-                // console.log(cookies)
-                // console.log("Done");
                 alert(res.data.message)
                 
                 navigate("/")
                 window.location.reload()
-                // if(res.data.message==="")
             })
 
         }
